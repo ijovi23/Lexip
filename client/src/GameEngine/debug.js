@@ -2,16 +2,43 @@
  * Created by Jovi on 2014/9/3.
  */
 
+var DebugRecorders = DebugRecorders || [];
+
+
+var _TYPE_ERROR = 1;
+var _TYPE_WARN = 2;
+var _TYPE_DEBUG = 3;
+
+function _debugLog(type, msg) {
+    var ret;
+    switch (type){
+        case _TYPE_DEBUG:
+            ret = "[debug]"+msg;
+            break;
+        case _TYPE_WARN:
+            ret = "[warning]"+msg;
+            break;
+        case _TYPE_ERROR:
+            ret = "[error]"+msg;
+            break;
+        default: ret = "";
+    }
+    for( var k in DebugRecorders ){
+        DebugRecorders[k].addDebugMsg(ret, type);
+    }
+    return ret;
+}
+
 function error(msg){
-    cc.log("[error]"+msg);
+    _debugLog(_TYPE_ERROR, msg);
 }
 
 function warn(msg){
-    cc.log("[warning]"+msg);
+    _debugLog(_TYPE_WARN, msg);
 }
 
 function debug(msg){
-    cc.log("[debug]"+msg);
+    _debugLog(_TYPE_DEBUG, msg);
 }
 
 function display(key, val){
@@ -74,7 +101,7 @@ function printArray(ary){
     for(var k in ary){
         str += "["+k+"] = "+JSON.stringify(ary[k])+"\n";
     }
-    debug(str);
+    cc.log(str);
 }
 
 
@@ -84,26 +111,32 @@ function DebugRecorder(){
     this.DebugMessages = "";
     this.Name = "DefaultDebugMsg";
     this.SavePath = "";
+    this.Level = Infinity; //0-disableAll 1-enableType1 2-enableType1&2 ... Infinity-enableAll
     this.inited = false;
 }
 
-DebugRecorder.prototype.init = function(fileName){
+DebugRecorder.prototype.init = function(fileName, level){
     this.DebugMessages = "";
-    var docPath = FileManager.getInstance().getDocumentPath();
+    var docPath = fileUtils.getDocumentPath();
     if( fileName != null ) this.Name = fileName;
+    if( level != null ){
+        this.Level = Number(level);
+    }
     this.SavePath = docPath + PATH_DEBUG + this.Name;
+    DebugRecorders[this.Name] = this;
     this.inited = true;
     cc.log("[DebugRecorder] Init " + this.Name);
 };
 
-DebugRecorder.prototype.addDebugMsg = function(msg){
+DebugRecorder.prototype.addDebugMsg = function(msg, debugType){
     if( !this.inited ) return;
+    if( debugType != null && debugType > this.Level ) return;
     this.DebugMessages += msg+"\n";
 };
 
 DebugRecorder.prototype.saveDebugMsg = function(){
     if( !this.inited ) return;
-    file.write(this.SavePath, this.DebugMessages);
+    fileUtils.writeStringToFile(this.SavePath, this.DebugMessages);
     cc.log("[DebugRecorder] Save " + this.Name);
 };
 
@@ -113,15 +146,16 @@ DebugRecorder.prototype.cleanDebugMsg = function(){
     cc.log("[DebugRecorder] Clean " + this.Name);
 };
 
-DebugRecorder.prototype.deleteDebugMsg = function(){
+DebugRecorder.prototype.deleteDebugMsgFile = function(){
     if( !this.inited ) return;
-    file.remove(this.SavePath);
+    fileUtils.removeFile(this.SavePath);
     cc.log("[DebugRecorder] Delete " + this.Name);
 };
 
 DebugRecorder.prototype.uninit = function() {
     this.DebugMessages = "";
     this.SavePath = "";
+    DebugRecorders[this.Name] = null;
     this.inited = false;
     cc.log("[DebugRecorder] Uninit " + this.Name);
 };

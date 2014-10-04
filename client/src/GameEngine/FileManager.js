@@ -2,17 +2,13 @@
  * Created by Jovi on 2014/9/3.
  */
 
-var FileManagerInstance;
+var fileUtils = fileUtils || {};
 
-function FileManager(){
-    this.PLATFORM = null;
-}
-
-FileManager.prototype.createDirectory = function(path){
+fileUtils.createDirectory = function(path){
     jsb.fileUtils.createDirectory(path);
 };
 
-FileManager.prototype.removeExtension = function(filename){
+fileUtils.removeExtension = function(filename){
     var nameLen = filename.lastIndexOf(".");
     if( nameLen > 0 ){
         return filename.substr(0, nameLen)
@@ -21,29 +17,22 @@ FileManager.prototype.removeExtension = function(filename){
     }
 };
 
-FileManager.prototype.getDocumentPath = function(){
+fileUtils.getDocumentPath = function(){
     return jsb.fileUtils.getWritablePath();
 };
 
-FileManager.prototype.getStringFromFile = function(filename){
+fileUtils.getStringFromFile = function(filename){
     return jsb.fileUtils.getStringFromFile(filename);
 };
 
-FileManager.prototype.writeStringToFile = function(filename, string){
+fileUtils.writeStringToFile = function(filename, string){
     return jsb.fileUtils.writeStringToFile(filename, string);
 };
 
-FileManager.prototype.removeFile = function(filename){
+fileUtils.removeFile = function(filename){
     return jsb.fileUtils.removeFile(filename);
 };
 
-FileManager.prototype.isFileExist = function(filename){
+fileUtils.isFileExist = function(filename){
     return jsb.fileUtils.isFileExist(filename);
-};
-
-FileManager.getInstance = function(){
-    if( FileManagerInstance == null ){
-        FileManagerInstance = new FileManager();
-    }
-    return FileManagerInstance;
 };

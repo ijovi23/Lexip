@@ -4,7 +4,7 @@
 
 /*UIManager*/
 
-var UIManagerInstance = null;
+var uiManager = new UIManager();
 
 function UIManager(){
     this.LAYERS = [];
@@ -106,9 +106,9 @@ UIManager.prototype.unRegisterMenu = function(menu){
 };
 
 UIManager.getInstance = function(){
-    if( UIManagerInstance == null ){
-        UIManagerInstance = new UIManager();}
-    return UIManagerInstance;
+    if( uiManager == null ){
+        uiManager = new UIManager();}
+    return uiManager;
 };
 
 /*some functions UIManager needs*/

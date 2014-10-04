@@ -2,7 +2,7 @@
  * Created by Jovi on 2014/9/3.
  */
 
-var UserManagerInstance;
+var userManager = new UserManager();
 
 function UserManager(){
     this.SYNC = {};
@@ -11,10 +11,10 @@ function UserManager(){
 
 UserManager.prototype.initProfile = function(profile){
     this.PROFILE_NAME = String(profile);
-    var docPath = FileManager.getInstance().getDocumentPath();
+    var docPath = FileUtils.getInstance().getDocumentPath();
     var profilePath = docPath + PATH_USER + this.PROFILE_NAME;
-    if( FileManager.getInstance().isFileExist(profilePath) ){
-        var data = FileManager.getInstance().getStringFromFile(profilePath);
+    if( FileUtils.getInstance().isFileExist(profilePath) ){
+        var data = FileUtils.getInstance().getStringFromFile(profilePath);
         var userdata = utils.load(data);
         copyProperties(this, userdata);
     }else{
@@ -30,9 +30,9 @@ UserManager.prototype.setProfile = function(profile){
 UserManager.prototype.saveProfile = function(){
     if( this.PROFILE_NAME != null ){
         var data = utils.save(this);
-        var docPath = FileManager.getInstance().getDocumentPath();
+        var docPath = FileUtils.getInstance().getDocumentPath();
         var profilePath = docPath + PATH_USER + this.PROFILE_NAME;
-        if( !FileManager.getInstance().writeStringToFile(profilePath, data)){
+        if( !FileUtils.getInstance().writeStringToFile(profilePath, data)){
             error("UserManager: Save Profile Failed");
         }
     }else{
@@ -42,16 +42,16 @@ UserManager.prototype.saveProfile = function(){
 
 UserManager.prototype.clearProfile = function()
 {
-    var docPath = FileManager.getInstance().getDocumentPath();
+    var docPath = FileUtils.getInstance().getDocumentPath();
     var profilePath = docPath + PATH_USER + this.PROFILE_NAME;
-    FileManager.getInstance().removeFile(profilePath);
+    FileUtils.getInstance().removeFile(profilePath);
 };
 
 UserManager.prototype.clearAllProfiles = function()
 {
-    var docPath = FileManager.getInstance().getDocumentPath();
+    var docPath = FileUtils.getInstance().getDocumentPath();
     var profilePath = docPath + PATH_USER + "new";
-    FileManager.getInstance().removeFile(profilePath);
+    FileUtils.getInstance().removeFile(profilePath);
 };
 
 UserManager.prototype.setData = function(key, obj, sid){
@@ -72,8 +72,8 @@ UserManager.prototype.setSyncId = function(key){
 };
 
 UserManager.getInstance = function(){
-    if(  UserManagerInstance == null ){
-        UserManagerInstance = new UserManager();
+    if(  userManager == null ){
+        userManager = new UserManager();
     }
-    return UserManagerInstance;
+    return userManager;
 };

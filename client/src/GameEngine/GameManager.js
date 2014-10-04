@@ -2,7 +2,7 @@
  * Created by Jovi on 2014/9/3.
  */
 
-var GameManagerInstance;
+var gameManager;
 
 function GameManager(){
     this.config = {};
@@ -14,8 +14,8 @@ GameManager.prototype.init = function(){
 };
 
 GameManager.getInstance = function(){
-    if(  GameManagerInstance == null ){
-        GameManagerInstance = new GameManager();
+    if(  gameManager == null ){
+        gameManager = new GameManager();
     }
-    return GameManagerInstance;
+    return gameManager;
 };

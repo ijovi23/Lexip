@@ -2,7 +2,7 @@
  * Created by Jovi on 2014/9/3.
  */
 
-var EventManagerInstance = null;
+var eventManager = new EventManager();
 
 var CONN_UNDEFINED = 0;
 var CONN_ESTABLISHED = 1;
@@ -33,8 +33,8 @@ function EventManager(){
 }
 
 EventManager.getInstance = function(){
-    if( EventManagerInstance == null ){
-        EventManagerInstance = new EventManager();
+    if( eventManager == null ){
+        eventManager = new EventManager();
     }
-    return EventManagerInstance;
+    return eventManager;
 };

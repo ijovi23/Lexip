@@ -6,13 +6,21 @@ var tableUtils = tableUtils || {};
 
 var TablesContainer = {};
 
+tableUtils.tablesPath = "src/Tables/";
+
+tableUtils.setTablesPath = function (strPath) {
+    if( typeof(strPath) == "string" ){
+        this.tablesPath = strPath;
+    }
+};
+
 tableUtils.loadTableFile = function(tablename){
     var fullname = tablename + ".jsc";
-    if( !FileManager.getInstance().isFileExist(fullname) ){
+    if( !FileUtils.getInstance().isFileExist(fullname) ){
         fullname = tablename + ".js";
     }
     try{
-        cc.loader.loadJs("src/Tables/" + fullname, function(err){
+        cc.loader.loadJs(this.tablesPath + fullname, function(err){
             if( err ) return cc.log("Load Failed.");
             cc.log("Load table:" + fullname);
             TablesContainer[tablename] = ExtJsData[tablename];
@@ -26,6 +34,9 @@ tableUtils.loadTableFile = function(tablename){
 tableUtils.queryTableByIndex = function(tablename, index){
     if( TablesContainer[tablename] != undefined ){
         var ret = TablesContainer[tablename][index];
+        if( ret == null ){
+            error("tableUtils.queryTableByIndex: Not Found.");
+        }
         return ret;
     }
 };

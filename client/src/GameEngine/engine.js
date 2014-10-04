@@ -11,10 +11,9 @@ var engine = {
 function initEngine(){
     try{
         // Base Manager
-        engine.file = FileManager.getInstance();
-        engine.ui = UIManager.getInstance();
-        engine.event = EventManager.getInstance();
-        engine.user = UserManager.getInstance();
+        engine.ui = uiManager;
+        engine.event = eventManager;
+        engine.user = userManager;
 
 
 
